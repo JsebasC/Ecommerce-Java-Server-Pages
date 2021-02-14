@@ -1,0 +1,13 @@
+Explicar funcionamiento de pagina y agg categoria y productos
+explicar cambiar carousel
+explicar importacion proyecto
+explicar seguridad pattern y js
+explicar nube
+
+
+module add --name=org.postgres --resources=/opt/drivers/postgresql-42.2.6.jar --dependencies=javax.api,javax.transaction.api
+
+import project
+wildfly->bin->opt->drivers
+standalone->configuration->save standolone.xml->copy and paste my standalone.xml with security
+

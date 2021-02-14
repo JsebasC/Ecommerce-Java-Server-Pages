@@ -1,0 +1,2212 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+-- Started on 2020-02-03 10:57:01
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE ecommerce;
+ALTER ROLE ecommerce WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'md551a48abda0f93ff554bfccbcc22f1435';
+CREATE ROLE ecommerce_admin;
+ALTER ROLE ecommerce_admin WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'md53fed1a689eacc11e1b95bbfc8f88ad81';
+CREATE ROLE ecommerce_client;
+ALTER ROLE ecommerce_client WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'md503d770ec00e40eaafdb99b654c87298d';
+CREATE ROLE ecommerce_guest;
+ALTER ROLE ecommerce_guest WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'md51cf4b9addbb1e9b0d8642c5222b02272';
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'md5cd1c40686663947188a8e95b0081356f';
+
+
+
+
+
+
+--
+-- Databases
+--
+
+--
+-- Database "template1" dump
+--
+
+\connect template1
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+-- Started on 2020-02-03 10:57:01
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2020-02-03 10:57:03
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "Backup" dump
+--
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+-- Started on 2020-02-03 10:57:03
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2876 (class 1262 OID 16563)
+-- Name: Backup; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE "Backup" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Spanish_Colombia.1252' LC_CTYPE = 'Spanish_Colombia.1252';
+
+
+ALTER DATABASE "Backup" OWNER TO postgres;
+
+\connect "Backup"
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 202 (class 1259 OID 16564)
+-- Name: categories; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    name character varying(255) NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.categories OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 16573)
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2877 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- TOC entry 204 (class 1259 OID 16575)
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    rating_cache double precision DEFAULT '3'::double precision NOT NULL,
+    rating_count integer DEFAULT 0 NOT NULL,
+    category_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    pricing double precision DEFAULT '0'::double precision NOT NULL,
+    short_description character varying(255) NOT NULL,
+    long_description text NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 16587)
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2878 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 16589)
+-- Name: reviews; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reviews (
+    id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    rating double precision NOT NULL,
+    comment text NOT NULL,
+    approved integer DEFAULT 1 NOT NULL,
+    spam integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.reviews OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 16599)
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2879 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
+-- TOC entry 208 (class 1259 OID 16601)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    user_type integer DEFAULT 0 NOT NULL,
+    username character varying(128) NOT NULL,
+    email character varying(128) NOT NULL,
+    password character varying(128) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 16607)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2880 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- TOC entry 2711 (class 2604 OID 16609)
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- TOC entry 2718 (class 2604 OID 16610)
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- TOC entry 2723 (class 2604 OID 16611)
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
+-- TOC entry 2727 (class 2604 OID 16612)
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- TOC entry 2863 (class 0 OID 16564)
+-- Dependencies: 202
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.categories (id, published, name, icon, created_at, updated_at) FROM stdin;
+1	1	Category One	category01.jpg	2020-01-21 06:33:44.883718	2020-01-21 06:33:44.883718
+2	1	Category Two	category02.jpg	2020-01-21 06:33:44.883718	2020-01-21 06:33:44.883718
+3	1	Category Three	category03.jpg	2020-01-21 06:33:44.883718	2020-01-21 06:33:44.883718
+4	1	Category Four	category04.jpg	2020-01-21 06:33:44.883718	2020-01-21 06:33:44.883718
+5	1	Category Five	category05.jpg	2020-01-21 06:33:44.883718	2020-01-21 06:33:44.883718
+\.
+
+
+--
+-- TOC entry 2865 (class 0 OID 16575)
+-- Dependencies: 204
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (id, published, rating_cache, rating_count, category_id, name, pricing, short_description, long_description, icon, created_at, updated_at) FROM stdin;
+1	1	3	0	1	First product	20.99	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product01.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+2	1	3	0	1	Second product	55	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product02.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+3	1	3	0	1	Third product	65	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product03.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+4	1	3	0	1	Fourth product	85	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product04.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+5	1	3	0	1	Fifth product	95	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product05.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+6	1	3	0	2	Product 06	35	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product06.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+7	1	3	0	2	Product 07	45	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product07.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+8	1	3	0	3	Product 08	52	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product08.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+9	1	3	0	3	Product 09	62	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product09.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+10	1	3	0	4	Product 10	14	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product10.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+11	1	3	0	4	Product 11	18	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product11.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+12	1	3	0	5	Product 12	40	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product12.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+13	1	3	0	5	Product 13	44	Short description	Lorem ipsum dolor sit amet, consectetur\nadipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex\nea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum	product13.jpg	2020-01-21 06:34:15.588533	2020-01-21 06:34:15.588533
+\.
+
+
+--
+-- TOC entry 2867 (class 0 OID 16589)
+-- Dependencies: 206
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.reviews (id, product_id, user_id, rating, comment, approved, spam, created_at, updated_at) FROM stdin;
+1	1	1	4.5	Comment 001	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+2	1	2	3.5	Comment 002	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+3	1	3	4	Comment 003	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+4	2	1	2.5	Comment 004	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+5	2	2	3.5	Comment 005	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+6	2	3	3	Comment 006	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+7	3	1	4	Comment 007	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+8	3	2	3.5	Comment 008	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+9	3	3	2	Comment 009	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+10	4	1	5	Comment 010	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+11	4	2	3	Comment 011	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+12	4	3	3.5	Comment 012	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+13	5	1	3	Comment 013	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+14	5	2	4.5	Comment 014	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+15	5	3	4	Comment 015	1	0	2020-01-21 06:35:37.876754	2020-01-21 06:35:37.876754
+\.
+
+
+--
+-- TOC entry 2869 (class 0 OID 16601)
+-- Dependencies: 208
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, user_type, username, email, password, created_at, updated_at) FROM stdin;
+1	0	jose	jose.lopez@gmail.com	jlopez2018	2020-01-21 06:35:09.094637	2020-01-21 06:35:09.094637
+2	0	maria	maria.quintero@gmail.com	mquintero2018	2020-01-21 06:35:09.094637	2020-01-21 06:35:09.094637
+3	0	pedro	pedro.gutierrez@gmail.com	pgutierrez2018	2020-01-21 06:35:09.094637	2020-01-21 06:35:09.094637
+\.
+
+
+--
+-- TOC entry 2881 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 5, true);
+
+
+--
+-- TOC entry 2882 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 13, true);
+
+
+--
+-- TOC entry 2883 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 15, true);
+
+
+--
+-- TOC entry 2884 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+
+
+--
+-- TOC entry 2729 (class 2606 OID 16614)
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2731 (class 2606 OID 16616)
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2733 (class 2606 OID 16618)
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2735 (class 2606 OID 16620)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2736 (class 2606 OID 16621)
+-- Name: products products_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+-- Completed on 2020-02-03 10:57:06
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "ecommerce" dump
+--
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+-- Started on 2020-02-03 10:57:06
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2965 (class 1262 OID 16630)
+-- Name: ecommerce; Type: DATABASE; Schema: -; Owner: ecommerce
+--
+
+CREATE DATABASE ecommerce WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Spanish_Colombia.1252' LC_CTYPE = 'Spanish_Colombia.1252';
+
+
+ALTER DATABASE ecommerce OWNER TO ecommerce;
+
+\connect ecommerce
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2 (class 3079 OID 16693)
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
+
+--
+-- TOC entry 2966 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 204 (class 1259 OID 16633)
+-- Name: categories; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    name character varying(255) NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.categories OWNER TO ecommerce;
+
+--
+-- TOC entry 203 (class 1259 OID 16631)
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2968 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 16647)
+-- Name: products; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    rating_cache double precision DEFAULT '3'::double precision NOT NULL,
+    rating_count integer DEFAULT 0 NOT NULL,
+    category_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    pricing double precision DEFAULT '0'::double precision NOT NULL,
+    short_description character varying(255) NOT NULL,
+    long_description text NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.products OWNER TO ecommerce;
+
+--
+-- TOC entry 205 (class 1259 OID 16645)
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2971 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16732)
+-- Name: profiles; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.profiles (
+    id integer NOT NULL,
+    name character varying(100),
+    profile character varying(100)
+);
+
+
+ALTER TABLE public.profiles OWNER TO ecommerce;
+
+--
+-- TOC entry 211 (class 1259 OID 16730)
+-- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.profiles_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profiles_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2974 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 16761)
+-- Name: purchase_items; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.purchase_items (
+    id bigint NOT NULL,
+    purchase_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    price double precision NOT NULL,
+    quantity double precision NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.purchase_items OWNER TO ecommerce;
+
+--
+-- TOC entry 216 (class 1259 OID 16766)
+-- Name: purchase_items_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.purchase_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.purchase_items_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2977 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: purchase_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.purchase_items_id_seq OWNED BY public.purchase_items.id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 16768)
+-- Name: purchases; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.purchases (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.purchases OWNER TO ecommerce;
+
+--
+-- TOC entry 218 (class 1259 OID 16773)
+-- Name: purchases_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.purchases_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.purchases_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2980 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: purchases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.purchases_id_seq OWNED BY public.purchases.id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 16680)
+-- Name: reviews; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.reviews (
+    id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    rating double precision NOT NULL,
+    comment text NOT NULL,
+    approved integer DEFAULT 1 NOT NULL,
+    spam integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.reviews OWNER TO ecommerce;
+
+--
+-- TOC entry 209 (class 1259 OID 16678)
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
+-- TOC entry 214 (class 1259 OID 16740)
+-- Name: user_profiles; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.user_profiles (
+    id bigint NOT NULL,
+    user_id bigint,
+    profile_id bigint
+);
+
+
+ALTER TABLE public.user_profiles OWNER TO ecommerce;
+
+--
+-- TOC entry 213 (class 1259 OID 16738)
+-- Name: user_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.user_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_profiles_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2986 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: user_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.user_profiles_id_seq OWNED BY public.user_profiles.id;
+
+
+--
+-- TOC entry 208 (class 1259 OID 16669)
+-- Name: users; Type: TABLE; Schema: public; Owner: ecommerce
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    user_type integer DEFAULT 0 NOT NULL,
+    username character varying(128) NOT NULL,
+    email character varying(128) NOT NULL,
+    password character varying(128) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.users OWNER TO ecommerce;
+
+--
+-- TOC entry 207 (class 1259 OID 16667)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: ecommerce
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO ecommerce;
+
+--
+-- TOC entry 2989 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ecommerce
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- TOC entry 2772 (class 2604 OID 16775)
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- TOC entry 2779 (class 2604 OID 16776)
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- TOC entry 2789 (class 2604 OID 16777)
+-- Name: profiles id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.profiles ALTER COLUMN id SET DEFAULT nextval('public.profiles_id_seq'::regclass);
+
+
+--
+-- TOC entry 2793 (class 2604 OID 16778)
+-- Name: purchase_items id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchase_items ALTER COLUMN id SET DEFAULT nextval('public.purchase_items_id_seq'::regclass);
+
+
+--
+-- TOC entry 2796 (class 2604 OID 16779)
+-- Name: purchases id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchases ALTER COLUMN id SET DEFAULT nextval('public.purchases_id_seq'::regclass);
+
+
+--
+-- TOC entry 2788 (class 2604 OID 16780)
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
+-- TOC entry 2790 (class 2604 OID 16781)
+-- Name: user_profiles id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.user_profiles ALTER COLUMN id SET DEFAULT nextval('public.user_profiles_id_seq'::regclass);
+
+
+--
+-- TOC entry 2783 (class 2604 OID 16782)
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- TOC entry 2945 (class 0 OID 16633)
+-- Dependencies: 204
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.categories (id, published, name, icon, created_at, updated_at) FROM stdin;
+8	1	Camisas	Camisas	2020-01-24 20:58:39.073152	2020-01-24 20:58:39.073152
+9	1	Gorras	gorras	2020-01-24 21:41:17.424465	2020-01-24 21:41:17.424465
+\.
+
+
+--
+-- TOC entry 2947 (class 0 OID 16647)
+-- Dependencies: 206
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.products (id, published, rating_cache, rating_count, category_id, name, pricing, short_description, long_description, icon, created_at, updated_at) FROM stdin;
+1	1	3	0	8	Blusa	23455	asdasd	asdasdasdasdasd	product07.jpg	2020-01-28 15:24:28.967611	2020-01-28 15:24:28.967611
+2	1	3	0	9	Gorra plana	1000	esto es una gorra	descripcion largaaa	product02.jpg	2020-01-29 10:13:27.269475	2020-01-29 10:13:27.269475
+3	1	3	0	8	zapato	2000	deasd	asdasdas	product05.jpg	2020-01-29 10:14:34.595143	2020-01-29 10:14:34.595143
+\.
+
+
+--
+-- TOC entry 2953 (class 0 OID 16732)
+-- Dependencies: 212
+-- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.profiles (id, name, profile) FROM stdin;
+1	Administrador	ADMINISTRATOR
+2	Cliente	CLIENT
+\.
+
+
+--
+-- TOC entry 2956 (class 0 OID 16761)
+-- Dependencies: 215
+-- Data for Name: purchase_items; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.purchase_items (id, purchase_id, product_id, price, quantity, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2958 (class 0 OID 16768)
+-- Dependencies: 217
+-- Data for Name: purchases; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.purchases (id, user_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2951 (class 0 OID 16680)
+-- Dependencies: 210
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.reviews (id, product_id, user_id, rating, comment, approved, spam, created_at, updated_at) FROM stdin;
+36	3	2	4.6000000000000005	Muy lindos los zapatos	1	0	2020-02-03 10:53:37.974005	2020-02-03 10:53:37.974005
+\.
+
+
+--
+-- TOC entry 2955 (class 0 OID 16740)
+-- Dependencies: 214
+-- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.user_profiles (id, user_id, profile_id) FROM stdin;
+1	1	1
+2	2	2
+3	3	1
+4	3	2
+\.
+
+
+--
+-- TOC entry 2949 (class 0 OID 16669)
+-- Dependencies: 208
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: ecommerce
+--
+
+COPY public.users (id, user_type, username, email, password, created_at, updated_at) FROM stdin;
+3	0	pedro	pedro.gutierrez@gmail.com	ArYun2FnNK48rMrlzd1LXQ==	2020-01-23 22:13:44.801602	2020-01-23 22:13:44.801602
+2	0	maria	maria.quintero@gmail.com	ICD0TdR2VeZNVGhxjKxaFw==	2020-01-23 22:13:44.801602	2020-01-23 22:13:44.801602
+1	0	jose	jose.lopez@gmail.com	oOj2zmbOn1h/a4evQZ1Ofw==	2020-01-23 22:13:44.801602	2020-01-23 22:13:44.801602
+\.
+
+
+--
+-- TOC entry 2991 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 7, true);
+
+
+--
+-- TOC entry 2992 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 13, true);
+
+
+--
+-- TOC entry 2993 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.profiles_id_seq', 2, true);
+
+
+--
+-- TOC entry 2994 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: purchase_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.purchase_items_id_seq', 19, true);
+
+
+--
+-- TOC entry 2995 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: purchases_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.purchases_id_seq', 14, true);
+
+
+--
+-- TOC entry 2996 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 36, true);
+
+
+--
+-- TOC entry 2997 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: user_profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.user_profiles_id_seq', 4, true);
+
+
+--
+-- TOC entry 2998 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ecommerce
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+
+
+--
+-- TOC entry 2798 (class 2606 OID 16644)
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2806 (class 2606 OID 16737)
+-- Name: profiles group_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.profiles
+    ADD CONSTRAINT group_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2800 (class 2606 OID 16661)
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2810 (class 2606 OID 16784)
+-- Name: purchase_items purchase_items_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchase_items
+    ADD CONSTRAINT purchase_items_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2812 (class 2606 OID 16786)
+-- Name: purchases purchases_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchases
+    ADD CONSTRAINT purchases_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2804 (class 2606 OID 16692)
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2808 (class 2606 OID 16745)
+-- Name: user_profiles user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2802 (class 2606 OID 16677)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2813 (class 2606 OID 16662)
+-- Name: products products_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- TOC entry 2816 (class 2606 OID 16792)
+-- Name: purchase_items purchase_items_purchase_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchase_items
+    ADD CONSTRAINT purchase_items_purchase_id_fkey FOREIGN KEY (purchase_id) REFERENCES public.purchases(id);
+
+
+--
+-- TOC entry 2817 (class 2606 OID 16797)
+-- Name: purchases purchases_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.purchases
+    ADD CONSTRAINT purchases_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2814 (class 2606 OID 16746)
+-- Name: user_profiles user_profiles_profile_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_profile_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id);
+
+
+--
+-- TOC entry 2815 (class 2606 OID 16751)
+-- Name: user_profiles user_profiles_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ecommerce
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_user_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2967 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: TABLE categories; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.categories TO ecommerce_admin;
+GRANT SELECT ON TABLE public.categories TO ecommerce_client;
+GRANT SELECT ON TABLE public.categories TO ecommerce_guest;
+
+
+--
+-- TOC entry 2969 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: SEQUENCE categories_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.categories_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.categories_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2970 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: TABLE products; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.products TO ecommerce_admin;
+GRANT SELECT ON TABLE public.products TO ecommerce_client;
+GRANT SELECT ON TABLE public.products TO ecommerce_guest;
+
+
+--
+-- TOC entry 2972 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: SEQUENCE products_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.products_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.products_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2973 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: TABLE profiles; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.profiles TO ecommerce_admin;
+
+
+--
+-- TOC entry 2975 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: SEQUENCE profiles_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.profiles_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.profiles_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2976 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: TABLE purchase_items; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.purchase_items TO ecommerce_admin;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.purchase_items TO ecommerce_client;
+
+
+--
+-- TOC entry 2978 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: SEQUENCE purchase_items_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.purchase_items_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.purchase_items_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2979 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: TABLE purchases; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.purchases TO ecommerce_admin;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.purchases TO ecommerce_client;
+
+
+--
+-- TOC entry 2981 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: SEQUENCE purchases_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.purchases_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.purchases_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2982 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: TABLE reviews; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.reviews TO ecommerce_admin;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.reviews TO ecommerce_client;
+GRANT SELECT ON TABLE public.reviews TO ecommerce_guest;
+
+
+--
+-- TOC entry 2984 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: SEQUENCE reviews_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.reviews_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.reviews_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2985 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: TABLE user_profiles; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.user_profiles TO ecommerce_admin;
+
+
+--
+-- TOC entry 2987 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: SEQUENCE user_profiles_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.user_profiles_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.user_profiles_id_seq TO ecommerce_client;
+
+
+--
+-- TOC entry 2988 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: TABLE users; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.users TO ecommerce_admin;
+
+
+--
+-- TOC entry 2990 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: SEQUENCE users_id_seq; Type: ACL; Schema: public; Owner: ecommerce
+--
+
+GRANT SELECT,USAGE ON SEQUENCE public.users_id_seq TO ecommerce_admin;
+GRANT SELECT,USAGE ON SEQUENCE public.users_id_seq TO ecommerce_client;
+
+
+-- Completed on 2020-02-03 10:57:08
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "postgres" dump
+--
+
+\connect postgres
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+-- Started on 2020-02-03 10:57:08
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2938 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+--
+-- TOC entry 3 (class 3079 OID 16393)
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
+
+--
+-- TOC entry 2939 (class 0 OID 0)
+-- Dependencies: 3
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 204 (class 1259 OID 16430)
+-- Name: categories; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    name character varying(255) NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.categories OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 16439)
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2940 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 16441)
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    published integer DEFAULT 0 NOT NULL,
+    rating_cache double precision DEFAULT '3'::double precision NOT NULL,
+    rating_count integer DEFAULT 0 NOT NULL,
+    category_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    pricing double precision DEFAULT '0'::double precision NOT NULL,
+    short_description character varying(255) NOT NULL,
+    long_description text NOT NULL,
+    icon character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 16453)
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2941 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- TOC entry 208 (class 1259 OID 16455)
+-- Name: profiles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.profiles (
+    id bigint NOT NULL,
+    name character varying(100),
+    profile character varying(100)
+);
+
+
+ALTER TABLE public.profiles OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 16458)
+-- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profiles_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2942 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 16460)
+-- Name: reviews; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reviews (
+    id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    rating double precision NOT NULL,
+    comment text NOT NULL,
+    approved integer DEFAULT 1 NOT NULL,
+    spam integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.reviews OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 16470)
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2943 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16472)
+-- Name: user_profiles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_profiles (
+    id bigint NOT NULL,
+    user_id bigint,
+    profile_id bigint
+);
+
+
+ALTER TABLE public.user_profiles OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 16475)
+-- Name: user_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_profiles_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2944 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: user_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_profiles_id_seq OWNED BY public.user_profiles.id;
+
+
+--
+-- TOC entry 214 (class 1259 OID 16477)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    user_type integer DEFAULT 0 NOT NULL,
+    username character varying(128) NOT NULL,
+    email character varying(128) NOT NULL,
+    password character varying(128) NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 16483)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2945 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- TOC entry 2761 (class 2604 OID 16518)
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- TOC entry 2768 (class 2604 OID 16519)
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- TOC entry 2769 (class 2604 OID 16520)
+-- Name: profiles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profiles ALTER COLUMN id SET DEFAULT nextval('public.profiles_id_seq'::regclass);
+
+
+--
+-- TOC entry 2774 (class 2604 OID 16521)
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
+-- TOC entry 2775 (class 2604 OID 16522)
+-- Name: user_profiles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_profiles ALTER COLUMN id SET DEFAULT nextval('public.user_profiles_id_seq'::regclass);
+
+
+--
+-- TOC entry 2779 (class 2604 OID 16523)
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- TOC entry 2921 (class 0 OID 16430)
+-- Dependencies: 204
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.categories (id, published, name, icon, created_at, updated_at) FROM stdin;
+1	1	Category One	category01.jpg	2019-07-22 19:25:07.883868	2019-07-22 19:25:07.883868
+2	1	Category Two	category02.jpg	2019-07-22 19:25:07.883868	2019-07-22 19:25:07.883868
+3	1	Category Three	category03.jpg	2019-07-22 19:25:07.883868	2019-07-22 19:25:07.883868
+4	1	Category Four	category04.jpg	2019-07-22 19:25:07.883868	2019-07-22 19:25:07.883868
+5	1	Category Five	category05.jpg	2019-07-22 19:25:07.883868	2019-07-22 19:25:07.883868
+9	0	flaco	melo	2019-07-29 17:28:00.723429	2019-07-29 17:28:00.723429
+10	0	pij98h9wf	p9h9uw	2019-07-29 17:31:28.518852	2019-07-29 17:31:28.518852
+11	0	pojj9ug	pojhiu	2019-07-29 17:33:59.60425	2019-07-29 17:33:59.60425
+12	0	pinbiyihbf	ópihug8y	2019-07-29 17:34:10.744877	2019-07-29 17:34:10.744877
+\.
+
+
+--
+-- TOC entry 2923 (class 0 OID 16441)
+-- Dependencies: 206
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (id, published, rating_cache, rating_count, category_id, name, pricing, short_description, long_description, icon, created_at, updated_at) FROM stdin;
+1	1	3	0	1	First product	20.99	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product01.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+2	1	3	0	1	Second product	55	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product02.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+3	1	3	0	1	Third product	65	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product03.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+4	1	3	0	1	Fourth product	85	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product04.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+5	1	3	0	1	Fifth product	95	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product05.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+6	1	3	0	2	Product 06	35	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product06.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+7	1	3	0	2	Product 07	45	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product07.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+8	1	3	0	3	Product 08	52	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product08.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+9	1	3	0	3	Product 09	62	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product09.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+10	1	3	0	4	Product 10	14	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product10.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+11	1	3	0	4	Product 11	18	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product11.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+12	1	3	0	5	Product 12	40	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product12.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+13	1	3	0	5	Product 13	44	Short description	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum	product13.jpg	2019-07-22 19:27:05.941056	2019-07-22 19:27:05.941056
+\.
+
+
+--
+-- TOC entry 2925 (class 0 OID 16455)
+-- Dependencies: 208
+-- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.profiles (id, name, profile) FROM stdin;
+1	Administrador	ADMINISTRATOR
+2	Cliente	CLIENT
+\.
+
+
+--
+-- TOC entry 2927 (class 0 OID 16460)
+-- Dependencies: 210
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.reviews (id, product_id, user_id, rating, comment, approved, spam, created_at, updated_at) FROM stdin;
+1	1	1	4.5	Comment 001	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+2	1	2	3.5	Comment 002	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+3	1	3	4	Comment 003	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+4	2	1	2.5	Comment 004	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+5	2	2	3.5	Comment 005	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+6	2	3	3	Comment 006	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+7	3	1	4	Comment 007	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+8	3	2	3.5	Comment 008	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+9	3	3	2	Comment 009	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+10	4	1	5	Comment 010	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+11	4	2	3	Comment 011	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+12	4	3	3.5	Comment 012	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+13	5	1	3	Comment 013	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+14	5	2	4.5	Comment 014	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+15	5	3	4	Comment 015	1	0	2019-07-22 19:33:22.818415	2019-07-22 19:33:22.818415
+\.
+
+
+--
+-- TOC entry 2929 (class 0 OID 16472)
+-- Dependencies: 212
+-- Data for Name: user_profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_profiles (id, user_id, profile_id) FROM stdin;
+1	1	1
+2	2	2
+3	3	1
+4	3	2
+5	1	1
+\.
+
+
+--
+-- TOC entry 2931 (class 0 OID 16477)
+-- Dependencies: 214
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, user_type, username, email, password, created_at, updated_at) FROM stdin;
+3	0	pedro	pedro.gutierrez@gmail.com	ArYun2FnNK48rMrlzd1LXQ==	2019-07-22 19:31:43.741735	2019-07-22 19:31:43.741735
+2	0	maria	maria.quintero@gmail.com	ICD0TdR2VeZNVGhxjKxaFw==	2019-07-22 19:31:43.741735	2019-07-22 19:31:43.741735
+1	0	jose	jose.lopez@gmail.com	oOj2zmbOn1h/a4evQZ1Ofw==	2019-07-22 19:31:43.741735	2019-07-22 19:31:43.741735
+4	0	sebastian	el._.chunche@hotmail.com	4QrcOUm6Wau+VuBX8g+IPg==	2019-07-30 07:33:19.643191	2019-07-30 07:33:19.643191
+\.
+
+
+--
+-- TOC entry 2946 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 12, true);
+
+
+--
+-- TOC entry 2947 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 13, true);
+
+
+--
+-- TOC entry 2948 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.profiles_id_seq', 4, true);
+
+
+--
+-- TOC entry 2949 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 15, true);
+
+
+--
+-- TOC entry 2950 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: user_profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_profiles_id_seq', 4, true);
+
+
+--
+-- TOC entry 2951 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+
+
+--
+-- TOC entry 2781 (class 2606 OID 16492)
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2785 (class 2606 OID 16494)
+-- Name: profiles group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profiles
+    ADD CONSTRAINT group_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2783 (class 2606 OID 16496)
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2787 (class 2606 OID 16498)
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2789 (class 2606 OID 16500)
+-- Name: user_profiles user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2791 (class 2606 OID 16502)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2792 (class 2606 OID 16503)
+-- Name: products products_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- TOC entry 2793 (class 2606 OID 16508)
+-- Name: user_profiles user_profiles_profile_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_profile_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id);
+
+
+--
+-- TOC entry 2794 (class 2606 OID 16513)
+-- Name: user_profiles user_profiles_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_profiles
+    ADD CONSTRAINT user_profiles_user_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+-- Completed on 2020-02-03 10:57:10
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "registro" dump
+--
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
+
+-- Started on 2020-02-03 10:57:10
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2834 (class 1262 OID 16524)
+-- Name: registro; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE registro WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Spanish_Colombia.1252' LC_CTYPE = 'Spanish_Colombia.1252';
+
+
+ALTER DATABASE registro OWNER TO postgres;
+
+\connect registro
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 205 (class 1259 OID 16561)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 204 (class 1259 OID 16553)
+-- Name: tb_produto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tb_produto (
+    id integer NOT NULL,
+    contrasena character varying(255),
+    correo character varying(255),
+    nickname character varying(255)
+);
+
+
+ALTER TABLE public.tb_produto OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 16547)
+-- Name: usuarios; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuarios (
+    idusuario integer NOT NULL,
+    nickname character varying(60) NOT NULL,
+    contrasena character varying(20) NOT NULL,
+    correo character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.usuarios OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 16545)
+-- Name: usuarios_idusuario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.usuarios_idusuario_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.usuarios_idusuario_seq OWNER TO postgres;
+
+--
+-- TOC entry 2835 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: usuarios_idusuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuarios_idusuario_seq OWNED BY public.usuarios.idusuario;
+
+
+--
+-- TOC entry 2694 (class 2604 OID 16550)
+-- Name: usuarios idusuario; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios ALTER COLUMN idusuario SET DEFAULT nextval('public.usuarios_idusuario_seq'::regclass);
+
+
+--
+-- TOC entry 2827 (class 0 OID 16553)
+-- Dependencies: 204
+-- Data for Name: tb_produto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tb_produto (id, contrasena, correo, nickname) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2826 (class 0 OID 16547)
+-- Dependencies: 203
+-- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuarios (idusuario, nickname, contrasena, correo) FROM stdin;
+1	SebasC	180400Jsebas	jhoansebastian231@hotmail.com
+3	Cuellaar	123	correo@hotmail.com
+2	Cuellaar	123	asdasd
+\.
+
+
+--
+-- TOC entry 2836 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hibernate_sequence', 1, false);
+
+
+--
+-- TOC entry 2837 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: usuarios_idusuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.usuarios_idusuario_seq', 3, true);
+
+
+--
+-- TOC entry 2698 (class 2606 OID 16560)
+-- Name: tb_produto tb_produto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tb_produto
+    ADD CONSTRAINT tb_produto_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2696 (class 2606 OID 16552)
+-- Name: usuarios usuarios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuarios
+    ADD CONSTRAINT usuarios_pkey PRIMARY KEY (idusuario);
+
+
+-- Completed on 2020-02-03 10:57:13
+
+--
+-- PostgreSQL database dump complete
+--
+
+-- Completed on 2020-02-03 10:57:13
+
+--
+-- PostgreSQL database cluster dump complete
+--
+
