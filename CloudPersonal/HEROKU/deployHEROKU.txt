@@ -1,0 +1,20 @@
+Exportar proyecto EN .WAR
+
+descarga git
+descarga heroku clic 
+
+git config --global user.name "sebastian cuellar"
+git config --global user.email "jhoansebastian231@hotmail.com"
+
+inicializar repositorio 
+ir a carpeta del war
+git init
+git add .
+git commit -am "First"
+
+heroku login
+heroku plugins:install heroku-cli-deploy
+heroku plugins:install java
+heroku war:deploy ecommerce.war --app storecommerce  O heroku war:deploy target/JSProjecto.war --app grubapp
+
+
